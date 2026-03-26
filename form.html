@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>THE SCHOOL REGISTRATION</title>
+
+	<a href=""></a>
+	<link rel="stylesheet" href="host.css">
+</head>
+<body>
+<!-- ✅ NOW heading is OUTSIDE style -->
+<h1>SCHOOL FORM</h1>
+
+<div class="form-container">
+
+<form action="process.php" method="POST" onsubmit="return validateName()">
+    
+<div class="form-group">
+    <input type="text" name="name" required>
+    <label>Name</label>
+</div>
+
+<div class="form-group">
+    <input type="text" name="address" required>
+    <label>Address</label>
+</div>
+
+<div class="form-group">
+    <input type="email" name="email" required>
+    <label>Email</label>
+</div>
+
+<div class="gender">
+    <label>Gender</label><br>
+    <input type="radio" name="gender" value="male" required> Male
+    <input type="radio" name="gender" value="female"> Female
+</div>
+
+<div class="form-group">
+    <input type="text" name="contact" required>
+    <label>Contact</label>
+</div>
+
+<input type="submit" value="Submit">
+
+</form>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const form = document.querySelector("form");
+    const container = document.querySelector(".form-container");
+    const inputs = document.querySelectorAll("input, textarea"); // include textarea
+    const body = document.body;
+
+    // 🌈 Animated gradient background
+    Object.assign(body.style, {
+        margin: "0",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(270deg, #4facfe, #00f2fe, #43e97b)",
+        backgroundSize: "600% 600%",
+        animation: "gradientMove 10s ease infinite",
+        fontFamily: "Arial, sans-serif"
+    });
+
+    // 🧊 Glass form container
+    Object.assign(container.style, {
+        padding: "30px",
+        borderRadius: "15px",
+        background: "rgba(255, 255, 255, 0.2)",
+        backdropFilter: "blur(10px)",
+        boxShadow: "0 0 25px rgba(0,0,0,0.2)",
+        width: "350px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    });
+
+    // 🎨 Title styling
+    const title = document.querySelector("h1");
+    Object.assign(title.style, {
+        color: "white",
+        textAlign: "center",
+        marginBottom: "20px",
+        letterSpacing: "2px"
+    });
+
+    // ✨ Input styling + floating effect
+    inputs.forEach(input => {
+        Object.assign(input.style, {
+            width: "100%",
+            padding: "12px",
+            marginBottom: "15px",
+            borderRadius: "8px",
+            border: "none",
+            outline: "none",
+            transition: "0.3s",
+            background: "rgba(255,255,255,0.8)"
+        });
+
+        input.addEventListener("focus", function() {
+            this.style.boxShadow = "0 0 10px #00f2fe";
+            this.style.transform = "scale(1.05)";
+        });
+
+        input.addEventListener("blur", function() {
+            this.style.boxShadow = "none";
+            this.style.transform = "scale(1)";
+        });
+
+        // ✅ Live validation border
+        input.addEventListener("input", function() {
+            if (this.checkValidity()) {
+                this.style.border = "2px solid #00ffcc";
+            } else {
+
+                this.style.border = "2px solid red";
+                
+            }
+        });
+    });
+
+    // 🎯 Style submit button
+    const btn = form.querySelector('input[type="submit"]');
+    Object.assign(btn.style, {
+        background: "#00f2fe",
+        color: "#000",
+        fontWeight: "bold",
+        cursor: "pointer",
+        width: "100%",
+        padding: "12px",
+        borderRadius: "8px",
+        transition: "0.3s"
+    });
+
+    btn.addEventListener("mouseover", () => {
+        btn.style.transform = "scale(1.05)";
+        btn.style.background = "#43e97b";
+    });
+
+    btn.addEventListener("mouseout", () => {
+        btn.style.transform = "scale(1)";
+        btn.style.background = "#00f2fe";
+    });
+
+    // 💬 Message box for feedback
+    const message = document.createElement("div");
+    Object.assign(message.style, {
+        textAlign: "center",
+        marginTop: "10px",
+        fontWeight: "bold",
+        color: "white"
+    });
+    form.appendChild(message);
+
+    // 🚀 Submit animation + validation
+    form.addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let name = form.querySelector('input[name="name"]').value.trim();
+
+    if (name.length < 3) {
+        showMessage("❌ Name must be at least 3 characters", "red");
+        return;
+    }
+
+    showMessage("✅ Submitted Successfully!", "#00ffcc");
+
+    // 🔒 Disable button
+    btn.disabled = true;
+    btn.style.background = "gray";
+    btn.style.cursor = "not-allowed";
+
+    let countdown = 60; // 60 seconds = 1 minute
+
+    const timer = setInterval(() => {
+        btn.value = "Wait " + countdown + "s";
+        countdown--;
+
+        if (countdown < 0) {
+            clearInterval(timer);
+            btn.disabled = false;
+            btn.value = "Submit";
+            btn.style.background = "#00f2fe";
+            btn.style.cursor = "pointer";
+        }
+    }, 1000);
+
+    // Submit after animation
+    form.style.transform = "scale(0.95)";
+    form.style.opacity = "0.7";
+
+    setTimeout(() => {
+        form.submit();
+    }, 1000);
+});
+
+    function showMessage(text, color) {
+        message.textContent = text;
+        message.style.color = color;
+    }
+
+    // ✨ Gradient animation keyframes
+    const style = document.createElement("style");
+    style.innerHTML = `
+        @keyframes gradientMove {
+            0% {background-position: 0% 50%;}
+            50% {background-position: 100% 50%;}
+            100% {background-position: 0% 50%;}
+        }
+    `;
+    document.head.appendChild(style);
+
+});
+</script>
+</body>
+</html>
